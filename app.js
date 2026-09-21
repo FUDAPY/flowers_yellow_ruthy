@@ -64,6 +64,51 @@ async function obtenerMensajesFirestore() {
     }
 }
 
+/* ====== Cartas amarillas: abrir, pasar a la siguiente y arrancar la historia ====== */
+let historiaIniciada = false;
+let timeoutHistoria;
+
+/* Abre una carta del mazo y la trae al frente */
+function abrirCarta(carta, index, total) {
+    carta.classList.add('abierta');
+    carta.style.zIndex = 600;
+    carta.style.transform = 'translate(-50%, -50%) scale(1.05) rotate(0deg)';
+    cartasLeidas.add(index);
+
+    if (cartasLeidas.size === total) {
+        programarHistoria(4000); // ya se leyeron todas: la historia arranca sola
+    }
+}
+
+/* Al tocar una carta ya abierta se pasa a la siguiente carta sin leer */
+function pasarASiguienteCarta(desde, total) {
+    const cartas = document.querySelectorAll('.Floresa_Amarillas');
+
+    for (let paso = 1; paso <= total; paso++) {
+        const i = (desde + paso) % total;
+        if (!cartasLeidas.has(i)) {
+            abrirCarta(cartas[i], i, total);
+            return;
+        }
+    }
+
+    programarHistoria(0); // no quedan cartas nuevas: se adelanta la historia
+}
+
+/* Arranca la historia una sola vez (con una pequeña espera para leer) */
+function programarHistoria(demora) {
+    if (historiaIniciada) return;
+
+    clearTimeout(timeoutHistoria);
+    timeoutHistoria = setTimeout(() => {
+        historiaIniciada = true;
+        const contenedor = document.getElementById('corazon-primavera');
+        contenedor.style.transition = "opacity 1s ease";
+        contenedor.style.opacity = "0";
+        iniciarHistoria();
+    }, demora === undefined ? 4000 : demora);
+}
+
 async function cargarCartas() {
     const contenedor = document.getElementById('corazon-primavera');
     let mensajes = await obtenerMensajesFirestore();
@@ -91,21 +136,11 @@ async function cargarCartas() {
 
         carta.addEventListener('click', function() {
             if (this.classList.contains('abierta')) {
+                // Carta ya leída: se cierra y el toque pasa a la siguiente carta
                 cerrarCarta(this);
+                pasarASiguienteCarta(index, mensajes.length);
             } else {
-                this.classList.add('abierta');
-                this.style.zIndex = 600;
-                this.style.transform = `translate(-50%, -50%) scale(1.05) rotate(0deg)`;
-
-                cartasLeidas.add(index);
-
-                if (cartasLeidas.size === mensajes.length) {
-                    setTimeout(() => {
-                        contenedor.style.transition = "opacity 1s ease";
-                        contenedor.style.opacity = "0";
-                        iniciarHistoria();
-                    }, 4000);
-                }
+                abrirCarta(this, index, mensajes.length);
             }
         });
 
@@ -122,9 +157,25 @@ function cerrarCarta(carta) {
 /* Deja las cartas como al inicio para poder volver a leer toda la historia */
 function reiniciarCartas() {
     const contenedor = document.getElementById('corazon-primavera');
+    clearTimeout(timeoutHistoria);
+    historiaIniciada = false; // la historia puede volver a arrancar
     cartasLeidas.clear();
     document.querySelectorAll('.Floresa_Amarillas').forEach(cerrarCarta);
     contenedor.style.opacity = "1";
+}
+
+/* Avisa con claridad si alguna foto no llega al dispositivo (archivo faltante) */
+function vigilarFoto() {
+    const imagen = document.getElementById('imagen-historia');
+    if (!imagen) return;
+
+    imagen.addEventListener('error', function () {
+        if (this.getAttribute('src')) this.parentElement.classList.add('sin-foto');
+    });
+
+    imagen.addEventListener('load', function () {
+        this.parentElement.classList.remove('sin-foto');
+    });
 }
 
 function activarExplosionCorazones() {
@@ -256,3 +307,4 @@ document.getElementById('galeria-historia').addEventListener('click', function()
 
 cargarCartas();
 activarExplosionCorazones();
+vigilarFoto();

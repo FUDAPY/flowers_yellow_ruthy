@@ -24,8 +24,8 @@ La experiencia se desarrolla en tres actos:
 
 | Acto | Qué pasa en pantalla |
 |:---:|---|
-| **1. Cielo nocturno** | Aparecen **cartas amarillas flotantes** (una por dedicatoria) sobre un cielo estrellado con flores animadas y corazones que explotan al tocarlos. |
-| **2. Las cartas** | Al tocar cada carta, **se voltea a blanco** y muestra su mensaje. Cuando se abren **todas**, el fondo se desvanece solo. |
+| **1. Cielo nocturno** | Aparecen **cartas amarillas flotantes** (una por dedicatoria) sobre un cielo estrellado con flores animadas y corazones que explotan al tocarlos. Al tocar una carta **se abre**; al volver a tocarla **se cierra y pasa sola a la siguiente carta**, así se leen las cuatro una tras otra. |
+| **2. Las cartas** | Cada carta abierta muestra su dedicatoria. Cuando se leyeron **todas**, el fondo se desvanece solo y empieza la historia. |
 | **3. La historia** | Se abre una **hoja tamaño carta real (8.5 × 11 in)** con un portarretrato, una foto y un texto que **se escribe letra por letra**. Un toque completa el texto **y hace saltar la foto** (rebote con brillo dorado) como confirmación; el siguiente toque pasa a la siguiente foto. |
 
 Cuando termina la última diapositiva, todo vuelve a empezar: las cartas se cierran y la historia puede vivirse de nuevo, sin recargar la página. ♻️
@@ -242,6 +242,7 @@ Después de cualquier cambio, vuelve a publicar con `firebase deploy --only host
 | Síntoma | Causa probable | Solución |
 |---|---|---|
 | **La página se ve sin fotos** (íconos rotos) | Faltan `foto1.png` … `foto4.png` | Cópialas en la raíz del proyecto con esos nombres exactos |
+| **La hoja muestra «🌻 Foto no disponible»** | La foto no llega al dispositivo: falta el archivo o no se subió | Verifica que `foto1.png` … `foto4.png` estén junto al `index.html`. Si estás viendo el sitio publicado, vuelve a desplegar con `firebase deploy --only hosting` (recuerda que **GitHub no incluye las fotos**: si abres el sitio desde un clon del repositorio, la app se verá sin imágenes) |
 | **No aparecen cartas y la pantalla está vacía** | Error de JavaScript | Abre la consola con `F12` y revisa el error |
 | **La galería abre pero el texto está vacío** | `nuestraHistoria` mal formado | Verifica que cada objeto tenga las claves `foto` y `texto` |
 | **Los emojis se ven como cuadritos** | Falta una fuente con emoji | Ya usa `"Segoe UI Emoji"`, `"Apple Color Emoji"` y `"Noto Color Emoji"` como respaldo; en Linux instala `fonts-noto-color-emoji` |

@@ -615,6 +615,7 @@ body {
 
 /* Marco blanco tipo portarretrato donde se apoya la imagen */
 .marco-foto {
+    position: relative; /* la foto se ancla acá: en el celular nunca colapsa a 0 */
     flex: 1 1 auto;
     min-height: 0;
     display: flex;
@@ -656,10 +657,32 @@ body {
 }
 
 #imagen-historia {
+    position: absolute; /* tamaño garantizado también en Safari/iOS */
+    inset: 0;
     display: block;
     width: 100%;
     height: 100%;
     object-fit: contain;
+}
+
+/* Si la foto no llega al dispositivo (archivo faltante), se avisa dentro del marco */
+.marco-foto.sin-foto::after {
+    content: "🌻 Foto no disponible";
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    text-align: center;
+    color: #b8860b;
+    font-size: clamp(0.9rem, 2vh, 1.3rem);
+    font-family: 'Dancing Script', "Te Amo", "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", cursive;
+    background: linear-gradient(160deg, #fffdf6 0%, #fff3cf 100%);
+}
+
+.marco-foto.sin-foto #imagen-historia {
+    visibility: hidden;
 }
 
 .separador-floral {
