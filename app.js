@@ -181,6 +181,21 @@ function animarHoja() {
     hoja.classList.add('entrando');
 }
 
+/* Confirmación visual del toque: la foto da un saltito */
+let timeoutSalto;
+function saltarImagen() {
+    const marco = document.querySelector('.marco-foto');
+    if (!marco) return;
+
+    clearTimeout(timeoutSalto);
+    marco.classList.remove('saltando');
+    void marco.offsetWidth; // reinicia la animación aunque ya estuviera saltando
+    marco.classList.add('saltando');
+
+    // La clase se limpia siempre, aunque el navegador no emita animationend
+    timeoutSalto = setTimeout(() => marco.classList.remove('saltando'), 560);
+}
+
 function mostrarDiapositiva(indice) {
     indiceHistoria = indice; // mantiene el índice sincronizado con lo que se ve
 
@@ -226,11 +241,14 @@ function escribirTexto(texto, contenedor, indicador) {
 
 document.getElementById('galeria-historia').addEventListener('click', function() {
     if (escribiendo) {
+        // Primer toque: completa la dedicatoria y la foto salta como confirmación
         clearTimeout(timeoutEscritura);
         document.getElementById('texto-historia').innerHTML = nuestraHistoria[indiceHistoria].texto;
         escribiendo = false;
         document.getElementById('indicador-toque').classList.remove('oculto');
+        saltarImagen();
     } else {
+        // Siguiente toque: pasa a la siguiente carta (foto + texto nuevos)
         indiceHistoria++;
         mostrarDiapositiva(indiceHistoria);
     }

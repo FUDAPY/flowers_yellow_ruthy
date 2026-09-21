@@ -16,7 +16,7 @@
 
 ---
 
-## ✨ ¿Qué es esto?
+## ¿Qué es esto?
 
 Es una **página web de una sola pantalla** pensada como regalo romántico. No usa frameworks ni build tools: es **HTML + CSS + JavaScript puro**, así que se abre con doble clic y también se puede publicar gratis en **Firebase Hosting**.
 
@@ -26,13 +26,13 @@ La experiencia se desarrolla en tres actos:
 |:---:|---|
 | **1. Cielo nocturno** | Aparecen **cartas amarillas flotantes** (una por dedicatoria) sobre un cielo estrellado con flores animadas y corazones que explotan al tocarlos. |
 | **2. Las cartas** | Al tocar cada carta, **se voltea a blanco** y muestra su mensaje. Cuando se abren **todas**, el fondo se desvanece solo. |
-| **3. La historia** | Se abre una **hoja tamaño carta real (8.5 × 11 in)** con un portarretrato, una foto y un texto que **se escribe letra por letra**. Un toque completa el texto; otro toque pasa a la siguiente foto. |
+| **3. La historia** | Se abre una **hoja tamaño carta real (8.5 × 11 in)** con un portarretrato, una foto y un texto que **se escribe letra por letra**. Un toque completa el texto **y hace saltar la foto** (rebote con brillo dorado) como confirmación; el siguiente toque pasa a la siguiente foto. |
 
 Cuando termina la última diapositiva, todo vuelve a empezar: las cartas se cierran y la historia puede vivirse de nuevo, sin recargar la página. ♻️
 
 ---
 
-## 📂 Estructura del proyecto
+## Estructura del proyecto
 
 ```
 ruthy/
@@ -55,7 +55,7 @@ ruthy/
 
 ---
 
-## 🚀 Instalación y uso
+## Instalación y uso
 
 ### Opción A — Sin instalar nada (la más simple) 🥇
 
@@ -98,7 +98,7 @@ Luego abre 👉 http://localhost:5000
 
 ---
 
-## 🎨 Qué tienes que cambiar
+## Qué tienes que cambiar
 
 Todo lo personalizable vive en **3 archivos**. Los puntos exactos:
 
@@ -118,7 +118,7 @@ const mensajesLocales = [
     "Eres el inicio de todas mis alegrías y la juventud de mi corazón. ..."
 ];
 ```
-> 💡 Una frase = una carta amarilla. Agrega o quita líneas libremente.
+> Una frase = una carta amarilla. Agrega o quita líneas libremente.
 
 ### 3️⃣ La historia (fotos + textos) → `app.js`
 
@@ -143,6 +143,7 @@ const nuestraHistoria = [
 | **Papel de la hoja carta** | `.hoja-carta { background-image: linear-gradient(160deg, #fffdf6 0%, #fff8e4 100%); }` |
 | **Tamaño de la hoja** | `.hoja-carta { height: min(78vh, 118vw); aspect-ratio: 8.5 / 11; }` — ¡mantén el `aspect-ratio` para conservar la proporción carta! |
 | **Velocidad de la escritura** | `app.js` → `escribirTexto()`: `setTimeout(escribir, 50)` (milisegundos por letra; súbelo para más lento) |
+| **Salto de la foto al tocar** | `style.css` → `.marco-foto.saltando` + `@keyframes saltarFoto` (0.5 s de rebote con brillo). En `app.js`, `saltarImagen()` aplica la clase y la limpia a los 560 ms (`timeoutSalto`) |
 | **Corazones flotantes** | `index.html` → bloque `<div class="bubbles">` (cada `.bubble` es un corazón SVG) |
 | **Flores de fondo de la galería** | `index.html` → `<div class="flores-fondo">` con los 10 🌻; se posicionan con `.flor-fondo--1` … `--10` en `style.css` |
 | **Tipografía** | `index.html` → el `<link>` de Google Fonts *Dancing Script*, y `font-family` en `style.css` |
@@ -151,7 +152,7 @@ const nuestraHistoria = [
 
 ---
 
-## 🔥 Firebase: para qué se usa aquí
+## Firebase: para qué se usa aquí
 
 El proyecto usa **Firebase** de dos maneras, y las dos son **opcionales**: la app funciona igual sin conexión.
 
@@ -201,11 +202,11 @@ El proyecto usa **Firebase** de dos maneras, y las dos son **opcionales**: la ap
    ```
 6. Publica **las reglas** (una sola vez): `firebase deploy --only firestore`
 
-> 🔐 **Nota de seguridad:** la `apiKey` de Firebase **no es un secreto** (está diseñada para ir en el cliente); lo que realmente protege tus datos son las **reglas** de Firestore. Aquí la colección `mensajes` es de **solo lectura pública**: cualquiera con la URL puede *leer* las dedicatorias, pero **nadie puede escribir ni borrar** nada desde el navegador. No guardes información sensible ahí.
+> **Nota de seguridad:** la `apiKey` de Firebase **no es un secreto** (está diseñada para ir en el cliente); lo que realmente protege tus datos son las **reglas** de Firestore. Aquí la colección `mensajes` es de **solo lectura pública**: cualquiera con la URL puede *leer* las dedicatorias, pero **nadie puede escribir ni borrar** nada desde el navegador. No guardes información sensible ahí.
 
 ---
 
-## 🌐 Despliegue en Firebase Hosting
+## Despliegue en Firebase Hosting
 
 ```bash
 npm install -g firebase-tools   # 1. Instala la CLI (una sola vez)
@@ -228,15 +229,15 @@ https://TU_PROYECTO.firebaseapp.com
 - **Caché inteligente:** imágenes y fuentes 7 días, `js`/`css` 1 hora y **HTML sin caché** → al re-desplegar, los cambios se ven al instante.
 - `"cleanUrls": true` → permite abrir la URL sin escribir `index.html`.
 
-> 📸 **Las fotos sí se suben al hosting.** El deploy publica la *carpeta local*, no el repositorio Git, así que tu página en Firebase se verá completa con las imágenes, aunque no estén en GitHub.
+> **Las fotos sí se suben al hosting.** El deploy publica la *carpeta local*, no el repositorio Git, así que tu página en Firebase se verá completa con las imágenes, aunque no estén en GitHub.
 >
-> ⚠️ **Ojo con el deploy automático desde GitHub** (GitHub Actions): como las fotos están ignoradas por Git, ese runner no las tendría y el sitio saldría sin imágenes. En ese escenario, súbelas a **Firebase Storage** y usa sus URLs en `nuestraHistoria`.
+> **Ojo con el deploy automático desde GitHub** (GitHub Actions): como las fotos están ignoradas por Git, ese runner no las tendría y el sitio saldría sin imágenes. En ese escenario, súbelas a **Firebase Storage** y usa sus URLs en `nuestraHistoria`.
 
 Después de cualquier cambio, vuelve a publicar con `firebase deploy --only hosting`.
 
 ---
 
-## 🧯 Solución de problemas
+## Solución de problemas
 
 | Síntoma | Causa probable | Solución |
 |---|---|---|
@@ -251,7 +252,7 @@ Después de cualquier cambio, vuelve a publicar con `firebase deploy --only host
 
 ---
 
-## 📄 Licencia
+## Licencia
 
 Este proyecto se distribuye bajo la **Licencia MIT** — ver el archivo [LICENSE](./LICENSE).
 
