@@ -7,7 +7,11 @@
 # --- Fotos personales (NO subir a GitHub) ---
 # Se ignoran TODAS las imágenes del proyecto (foto1.png ... foto4.png,
 # capturas, miniaturas). Al desplegar con Firebase CLI las fotos locales
-# sí viajan, porque el deploy sube la carpeta, no el repositorio Git.
+# sí viajan, porque el deploy sube la CARPETA, no el repositorio Git.
+#
+# Nota: si algún día agregas una imagen que NO sea personal (un adorno,
+# un ícono, una textura de diseño), fuérzala así:
+#     git add -f adorno.png
 *.png
 *.jpg
 *.jpeg
@@ -15,17 +19,32 @@
 *.gif
 *.bmp
 *.tiff
+*.avif
+*.heic
+*.heif
+*.raw
+*.cr2
+*.nef
 fotos/
 img/
 capturas/
+imagenes/
 
 # --- Archivos de prueba / mediciones locales ---
 _prueba*
 _medidas*
 *.tmp
 
+# --- Secretos y variables de entorno ---
+.env
+.env.local
+.env.*.local
+*serviceAccount*.json
+
 # --- Configuración local del editor (rutas absolutas de mi PC) ---
 .vscode/
+.idea/
+*.code-workspace
 
 # --- Herramientas de Firebase / Node ---
 .firebase/
