@@ -47,6 +47,8 @@ _medidas*
 *.code-workspace
 
 # --- Herramientas de Firebase / Node ---
+# OJO: firebase.json, .firebaserc, firestore.rules e index de Firestore
+# SÍ se versionan (son configuración del proyecto, no secretos).
 .firebase/
 firebase-debug.log
 firestore-debug.log
@@ -54,7 +56,6 @@ ui-debug.log
 database-debug.log
 pubsub-debug.log
 node_modules/
-functions/
 
 # --- Registros y basura del sistema ---
 *.log
