@@ -1,0 +1,26 @@
+rules_version = '2';
+
+// ============================================================
+//  Reglas de seguridad de Cloud Firestore — Ruthy
+//  - La colección "mensajes" (dedicatorias de las cartas) es de
+//    SOLO LECTURA PÚBLICA: la página puede leerla, nadie puede
+//    escribir ni borrar desde el navegador.
+//  - Todo lo demás queda cerrado por defecto.
+//  Publicar con:  firebase deploy --only firestore:rules
+// ============================================================
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Dedicatorias que se muestran en las cartas amarillas.
+    // Cada documento debe tener un campo de texto llamado "texto".
+    match /mensajes/{mensajeId} {
+      allow read: if true;      // cualquiera con la URL puede leer
+      allow create, update, delete: if false;  // solo desde la consola o el Admin SDK
+    }
+
+    // Cualquier otra colección: acceso denegado.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
