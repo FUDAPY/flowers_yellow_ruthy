@@ -1,0 +1,44 @@
+# ============================================================
+#  Ruthy - Carta romántica de primavera
+#  Solo se versiona el CÓDIGO (index.html, style.css, app.js)
+#  Las fotos personales se quedan fuera de GitHub
+# ============================================================
+
+# --- Fotos personales (NO subir a GitHub) ---
+# Se ignoran TODAS las imágenes del proyecto (foto1.png ... foto4.png,
+# capturas, miniaturas). Al desplegar con Firebase CLI las fotos locales
+# sí viajan, porque el deploy sube la carpeta, no el repositorio Git.
+*.png
+*.jpg
+*.jpeg
+*.webp
+*.gif
+*.bmp
+*.tiff
+fotos/
+img/
+capturas/
+
+# --- Archivos de prueba / mediciones locales ---
+_prueba*
+_medidas*
+*.tmp
+
+# --- Configuración local del editor (rutas absolutas de mi PC) ---
+.vscode/
+
+# --- Herramientas de Firebase / Node ---
+.firebase/
+firebase-debug.log
+firestore-debug.log
+ui-debug.log
+database-debug.log
+pubsub-debug.log
+node_modules/
+functions/
+
+# --- Registros y basura del sistema ---
+*.log
+Thumbs.db
+desktop.ini
+.DS_Store
